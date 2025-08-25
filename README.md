@@ -36,7 +36,7 @@ Hejsan hallå, din snea tå!
 ```
 GET <lamba_URL> // GET
 POST <lamba_URL> // POST
-PATCH <lambda_URL> // PATCH
+DELETE <lambda_URL> // DELETE
 ```
 
 5. Skapa en funktion som slumpar fram ett skämt ur en array med 5st fördefinerade skämt. Ju sämre skämt, desto bättre.
@@ -90,11 +90,113 @@ Vid PUT ska följande returneras:
     symbols: Boolean // Lösenordet innehåller minst 1 symbol
 }
 ```
-
 Lösenordet som genereras måste vara minst 8 tecken långt.
 
+## Kortleken
+I denna övning skall du skapa en ny lambdafunktion för varje steg
+
+### Steg 1
+
+Skapa en ny lambdafunktion som vid ett *GET*-anrop returnerar en kortlek.
+
+ex. 
+```
+method : GET
+url: /cards
+response: [
+    {
+        "name": "2 of hearts",
+        "value" : 2,
+        "suit" : "hearts"
+    },
+    ...
+] 
+
+```
+
+### Steg 2
+
+Skapa en ny lambdafunktion som tar emot en kortlek via requestens body, och returnerar kortleken blandad
+
+ex. 
+```
+method : POST
+url: /cards/shuffle
+body: [
+    {
+        "name": "2 of hearts",
+        "value" : 2,
+        "suit" : "hearts"
+    },
+    {
+        "name": "3 of hearts",
+        "value" : 3,
+        "suit" : "hearts"
+    },
+    ...,
+response: [
+    {
+        "name": "Ace of spades",
+        "value" : 14,
+        "suit" : "spades"
+    },
+    {
+        "name": "2 of hearts",
+        "value" : 2,
+        "suit" : "hearts"
+    },
+    ...,
+] 
+```
+
+### Steg 3
+
+Skapa en ny lambda funktion som tar emot den blandade kortleken via requestets body, delar ut ett kort i taget till spelare 1 och spelare 2 tills båda spelarna har 6 kort vardera, och returnera sedan spelarnas båda händer.
+
+ex. 
+```
+method : POST
+url: /cards/shuffle
+body: [
+    {
+        "name": "Ace of spades",
+        "value" : 14,
+        "suit" : "spades"
+    },
+    {
+        "name": "2 of hearts",
+        "value" : 2,
+        "suit" : "hearts"
+    },
+    ...,
+response: [
+    {
+        "name" : "playerOne",
+        "hand" : [
+            {
+                "name": "Ace of spades",
+                "value" : 14,
+                "suit" : "spades"
+            },
+            ...
+        ]
+    },
+    {
+        "name" : "playerTwo",
+        "hand" : [
+            {
+                "name": "2 of hearts",
+                "value" : 2,
+                "suit" : "hearts"
+            },
+            ...
+        ]
+    },
+] 
+```
+
 ## AWS CLI - Koda API lokalt
-Koda upp ett todo-api lokalt på din dator, och använd ditt AWS CLI för att zippa och deploya dina filer.
+Koda upp ett skämt-api lokalt på din dator, och använd ditt AWS CLI för att zippa och deploya dina filer.
 API:et skall innehålla en array av objekt som ser ut enligt följande:
 ```
 {
@@ -103,23 +205,24 @@ API:et skall innehålla en array av objekt som ser ut enligt följande:
     done : false
 }
 ```
+
 Skapa upp funktionalitet för att utföra de fyra vanligaste HTTP-metoderna (GET, POST, PUT, DELETE).
 
 ### Basic
 
 #### GET
-Genom ett GET-anrop skall man kunna hämta alla todouppgifter i arrayen.
+Genom ett GET-anrop skall man kunna hämta alla skämtuppgifter i arrayen.
 
 #### POST
-Genom ett POST-anrop där du skickar med ett nytt objekt i eventets body skall du lägga till den nya todon i arrayen.
+Genom ett POST-anrop där du skickar med ett nytt objekt i eventets body skall du lägga till det nya skämtet i arrayen.
 
 ### Level Up
 
 #### GET
-Använd dig av query parametrar för att hämta en specifik todo.
+Använd dig av query parametrar för att hämta ett specifikt skämt.
 
 #### PUT
-Genom ett PUT-anrop där du anger vilken todo som skall uppdateras i en query parameter, så skall den angivna todon toggla "done".
+Genom ett PUT-anrop där du anger vilket skämt som skall uppdateras i en query parameter, så skall det angivna skämtet skrivas över med det nya.
 
 #### DELETE
-Genom ett DELETE-anrop där du anger vilken todo som skall tas bort i en query parameter, så skall den angivna todon raderas.
+Genom ett DELETE-anrop där du anger vilket skämt som skall tas bort i en query parameter, så skall det angivna skämtet raderas.
